@@ -14,7 +14,7 @@ import { Viewer } from "@photo-sphere-viewer/core";
 
 export default function RoomViewer() {
     const viewerRef = useRef(null);
-    const [intro, setIntro] = useState(false);
+    const [intro, setIntro] = useState(true);
 
     const baseUrl = "pano_";
     const caption = "Panorama";
