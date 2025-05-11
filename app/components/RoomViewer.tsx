@@ -5,11 +5,11 @@ import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
 import { MarkersPlugin, } from "@photo-sphere-viewer/markers-plugin";
 import { VirtualTourPlugin, VirtualTourPluginConfig } from "@photo-sphere-viewer/virtual-tour-plugin";
 import { GalleryPlugin, GalleryPluginConfig } from "@photo-sphere-viewer/gallery-plugin";
+import { Viewer } from "@photo-sphere-viewer/core";
 
 import "@photo-sphere-viewer/markers-plugin/index.css";
 import "@photo-sphere-viewer/virtual-tour-plugin/index.css";
 import "@photo-sphere-viewer/gallery-plugin/index.css";
-import { Viewer } from "@photo-sphere-viewer/core";
 
 
 export default function RoomViewer() {
@@ -119,11 +119,11 @@ export default function RoomViewer() {
                 defaultTransition={{ effect: 'fade' }}
             />
             {intro && (
-                <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-auto bg-white z-[100] text-black p-8 rounded-2xl">
-                    <h1 className="font-bold text-4xl mb-4">Welcome to Virtual Tour</h1>
-                    <p className="text-lg mb-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Beatae ipsum enim, et debitis, sequi sit hic obcaecati officiis fuga neque est dolore officia, culpa voluptates consectetur maxime ea nulla ad.</p>
-                    <p className="mb-4 text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium voluptatem commodi fugiat non dolorem quos corrupti necessitatibus, vel ad hic nulla repudiandae tempora saepe eum officia explicabo dolores doloribus reprehenderit!</p>
-                    <button type="button" onClick={() => setIntro(false)} className="bg-sky-700 text-white font-bold px-6 py-3 text-lg rounded-2xl cursor-pointer">
+                <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vh] flex flex-col justify-center lg:w-[50vw] lg:h-auto bg-white z-[100] text-black p-8 rounded-2xl">
+                    <h1 className="font-bold text-2xl lg:text-4xl mb-4">Welcome to Virtual Tour</h1>
+                    <p className="lg:text-lg mb-2">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Beatae ipsum enim, et debitis, sequi sit hic obcaecati officiis fuga neque est dolore officia, culpa voluptates consectetur maxime ea nulla ad.</p>
+                    <p className="mb-4 lg:text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium voluptatem commodi fugiat non dolorem quos corrupti necessitatibus, vel ad hic nulla repudiandae tempora saepe eum officia explicabo dolores doloribus reprehenderit!</p>
+                    <button type="button" onClick={() => setIntro(false)} className="bg-sky-700 text-white font-bold px-6 py-3 lg:text-lg rounded-2xl cursor-pointer">
                         Start Virtual Tour
                     </button>
                 </div>
