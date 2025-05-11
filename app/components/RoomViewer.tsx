@@ -1,40 +1,30 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useRef, useState } from "react";
 import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer";
-import { MarkersPlugin } from "@photo-sphere-viewer/markers-plugin";
-import { VirtualTourPlugin } from "@photo-sphere-viewer/virtual-tour-plugin";
-import { GalleryPlugin } from "@photo-sphere-viewer/gallery-plugin";
+import { MarkersPlugin, } from "@photo-sphere-viewer/markers-plugin";
+import { VirtualTourPlugin, VirtualTourPluginConfig } from "@photo-sphere-viewer/virtual-tour-plugin";
+import { GalleryPlugin, GalleryPluginConfig } from "@photo-sphere-viewer/gallery-plugin";
 
 import "@photo-sphere-viewer/markers-plugin/index.css";
 import "@photo-sphere-viewer/virtual-tour-plugin/index.css";
 import "@photo-sphere-viewer/gallery-plugin/index.css";
+import { Viewer } from "@photo-sphere-viewer/core";
 
 
 export default function RoomViewer() {
     const viewerRef = useRef(null);
     const [intro, setIntro] = useState(false);
-    const [getCurrentNodeFunction, setGetCurrentNodeFunction] =
-        useState(null);
 
     const baseUrl = "pano_";
     const caption = "Panorama";
 
 
-
-    const handleReady = (instance: any) => {
-        const virtualTour = instance.getPlugin(VirtualTourPlugin);
+    const handleReady = (instance: Viewer) => {
+        const virtualTour = instance.getPlugin(VirtualTourPlugin) as VirtualTourPlugin;
         if (!virtualTour) return;
 
-        const markerLighthouse = {
-            id: "marker-1",
-            image: baseUrl + "pictos/pin-red.png",
-            tooltip: "Cape Florida Light, Key Biscayne",
-            size: { width: 32, height: 32 },
-            anchor: "bottom center",
-            gps: [-80.155973, 25.666601, 29 + 3],
-        };
+        const customArrow = { image: 'info.png', size: { width: 60, height: 60 } }
 
         virtualTour.setNodes(
             [
@@ -43,22 +33,27 @@ export default function RoomViewer() {
                     panorama: baseUrl + "1.jpg",
                     thumbnail: baseUrl + "1.jpg",
                     name: "One",
-                    caption: `[1] ${caption}`,
-                    links: [{ nodeId: "2" }],
-                    markers: [markerLighthouse],
-                    gps: [-80.156479, 25.666725, 3],
-                    panoData: { poseHeading: 80 },
+                    caption: "First Panorama",
+                    links: [{
+                        nodeId: "2", position: { yaw: "200deg", pitch: "-25deg", },
+                        arrowStyle: customArrow,
+                    }],
+
                 },
                 {
                     id: "2",
                     panorama: baseUrl + "2.jpg",
                     thumbnail: baseUrl + "2.jpg",
-                    name: "Two",
-                    caption: `[2] ${caption}`,
-                    links: [{ nodeId: "3" }, { nodeId: "1" }],
-                    markers: [markerLighthouse],
-                    gps: [-80.156168, 25.666623, 3],
-                    panoData: { poseHeading: 270 },
+                    name: "Second Panorama",
+                    caption: `Second Panorama`,
+                    links: [{
+                        nodeId: "3", position: { yaw: "40deg", pitch: "-25deg", },
+                        arrowStyle: customArrow,
+                    },
+                    {
+                        nodeId: "1", position: { yaw: "220deg", pitch: "-25deg", },
+                        arrowStyle: customArrow,
+                    }],
                 },
                 {
                     id: "3",
@@ -66,9 +61,10 @@ export default function RoomViewer() {
                     thumbnail: baseUrl + "3.jpg",
                     name: "Three",
                     caption: `[3] ${caption}`,
-                    links: [{ nodeId: "4" }, { nodeId: "2" }],
-                    gps: [-80.155932, 25.666498, 5],
-                    panoData: { poseHeading: 400 },
+                    links: [{
+                        nodeId: "4", position: { yaw: "-70deg", pitch: "-10deg", },
+                        arrowStyle: customArrow,
+                    }],
                 },
                 {
                     id: "4",
@@ -76,38 +72,40 @@ export default function RoomViewer() {
                     thumbnail: baseUrl + "4.jpg",
                     name: "Four",
                     caption: `[4] ${caption}`,
-                    links: [{ nodeId: "3" }, { nodeId: "1" }],
-                    gps: [-80.156089, 25.666357, 3],
-                    panoData: { poseHeading: 78 },
+                    links: [{
+                        nodeId: "1", position: { yaw: "-90deg", pitch: "-25deg", },
+                        arrowStyle: customArrow,
+                    },
+                    {
+                        nodeId: "3", position: { yaw: "80deg", pitch: "-25deg", },
+                        arrowStyle: customArrow,
+                    }],
                 },
             ],
-            "1"
+            "3"
         );
-
-        const getCurrentNode = virtualTour.getCurrentNode.bind(virtualTour);
-        setGetCurrentNodeFunction(() => getCurrentNode);
     };
 
-    const plugins = [
-        MarkersPlugin,
-        [
-            GalleryPlugin,
-            {
-                thumbnailSize: { width: 100, height: 100 },
-            },
-        ],
-        [
-            VirtualTourPlugin,
-            {
-                positionMode: "gps",
-                renderMode: "3d",
-            },
-        ],
-    ];
-
-    const handleClick = () => {
-        console.log(getCurrentNodeFunction);
-    };
+    const plugins: Array<
+        | typeof MarkersPlugin
+        | [typeof GalleryPlugin, GalleryPluginConfig]
+        | [typeof VirtualTourPlugin, VirtualTourPluginConfig]
+    > = [
+            MarkersPlugin,
+            [
+                GalleryPlugin,
+                {
+                    thumbnailSize: { width: 100, height: 100 },
+                },
+            ],
+            [
+                VirtualTourPlugin,
+                {
+                    positionMode: "manual",
+                    renderMode: "2d",
+                },
+            ],
+        ];
     return (
         <div>
             <ReactPhotoSphereViewer
@@ -131,7 +129,6 @@ export default function RoomViewer() {
                 </div>
             )}
 
-            <button onClick={handleClick}>Get Current Node</button>
         </div>
     );
 }
